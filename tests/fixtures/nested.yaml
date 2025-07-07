@@ -1,0 +1,6 @@
+person:
+  name: Jane Smith
+  age: 25
+  address:
+    street: 123 Main St
+    city: New York

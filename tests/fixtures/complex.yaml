@@ -1,0 +1,16 @@
+company:
+  name: "Tech Corp"
+  employees:
+    - name: "John"
+      age: 30
+      position: "Developer"
+    - name: "Jane"
+      age: 28
+      position: "Designer"
+  departments:
+    engineering:
+      budget: 100000
+      head: "Bob"
+    marketing:
+      budget: 50000
+      head: "Alice"
