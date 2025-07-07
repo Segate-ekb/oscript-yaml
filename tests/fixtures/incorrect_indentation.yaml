@@ -1,0 +1,4 @@
+first_level:
+  second_level_a: value1
+ third_level_incorrect:  # Неправильный отступ (1 пробел)
+    fourth_level: value2

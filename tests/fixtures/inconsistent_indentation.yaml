@@ -1,0 +1,7 @@
+level1:
+  level2_with_2_spaces:
+    level3_with_4_spaces: value1
+      level4_with_6_spaces: value2
+level1_again:
+    level2_with_4_spaces: value3
+        level3_with_8_spaces: value4
