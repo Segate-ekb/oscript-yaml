@@ -1,0 +1,19 @@
+# Демонстрация ключей в кавычках
+"quoted key": simple value
+'single quoted key': another value
+"key with spaces": value with spaces
+"key:with:colons": works too
+"123": numeric key name
+normal_key: normal value
+
+# Вложенные структуры с ключами в кавычках
+"parent object":
+  "child key": child value
+  normal_child: normal value
+  "another quoted": another value
+
+# Массивы с ключами в кавычках
+items:
+  - "first item": value1
+  - "second item": value2
+  - normal_item: value3
