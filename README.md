@@ -23,9 +23,9 @@ git clone https://github.com/your-username/oscript-yaml.git
 ## ⚡ Быстрый старт
 
 ```bsl
-#Использовать yaml
+#Использовать oscript-yaml
 
-Парсер = Новый ЧтениеYaml();
+Парсер = Новый ПарсерYaml();
 
 // Простой пример
 СтрокаYAML = "
