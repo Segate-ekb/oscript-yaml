@@ -34,7 +34,7 @@ git clone https://github.com/your-username/oscript-yaml.git
 | active: true
 |";
 
-Результат = Парсер.Прочитать(СтрокаYAML);
+Результат = Парсер.ПрочитатьYaml(СтрокаYAML);
 Сообщить(Результат.Получить("name")); // John Doe
 ```
 
