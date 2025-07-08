@@ -1,3 +1,5 @@
 oscript_modules/
 out/
 *.ospx
+
+.github/instructions/
