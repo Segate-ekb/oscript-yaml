@@ -1,9 +1,0 @@
-mixed:
-  string_value: "Hello World"
-  number_value: 42
-  boolean_value: true
-  null_value: null
-  array:
-    - item1
-    - 123
-    - false

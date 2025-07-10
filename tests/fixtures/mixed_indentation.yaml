@@ -1,6 +1,0 @@
-first_level:
-  string_with_spaces: value1
-	string_with_tab: value2
-  nested:
-  	mixed_indent: value3
-    consistent_spaces: value4
