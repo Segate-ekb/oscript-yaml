@@ -3,3 +3,4 @@ out/
 *.ospx
 
 .github/instructions/
+.vscode/launch.json
