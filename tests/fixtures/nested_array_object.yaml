@@ -1,6 +1,0 @@
-volumes:
-  - sonarr_config:
-      test: /config
-      test2: /downloads
-  - media:/plex_media
-  - transmission_download:/downloads
