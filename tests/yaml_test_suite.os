@@ -1,0 +1,3636 @@
+﻿#Использовать asserts
+#Использовать collectionos
+#Использовать fs
+#Использовать ".."
+#Использовать "."
+
+Перем ПутьКТестовымДанным;
+
+&ТестовыйНабор(Характер = "Одиночка")
+Процедура ПриСозданииОбъекта()
+	ПутьКТестовымДанным = ТестовыеУтилиты.ПолучитьПутьКТестовымДанным("yaml-test-suite");
+КонецПроцедуры
+
+
+Процедура ВыполнитьТест(Каталог) Экспорт
+	
+	ПутьККаталогу = ОбъединитьПути(ПутьКТестовымДанным, Каталог);
+
+	ПутьYAML = ОбъединитьПути(ПутьККаталогу, "in.yaml");
+	СодержимоеYAML = ТестовыеУтилиты.ПрочитатьТекстФайла(ПутьYAML);
+	ЧтениеYaml = ТестовыеУтилиты.СоздатьЭкземплярПарсера();
+
+	РезультатYAML = ЧтениеYaml.ПрочитатьYaml(СодержимоеYAML);
+	РезультатСтрокой = ДанныеВСтрокуJSON(РезультатYAML);
+
+	ПутьКФайлуОшибки = ОбъединитьПути(ПутьККаталогу, "error");
+	ПутьКФайлуJson = ОбъединитьПути(ПутьККаталогу, "in.json");
+	Если ФС.ФайлСуществует(ПутьКФайлуОшибки) Тогда
+		// Это ошибка
+		МассивПараметров = Новый Массив;
+		МассивПараметров.Добавить(СодержимоеYAML);
+
+		Ожидаем.Что(ЧтениеYaml)
+			.Метод("ПрочитатьYaml", МассивПараметров)
+			.ВыбрасываетИсключение();
+
+	ИначеЕсли ФС.ФайлСуществует(ПутьКФайлуJson) Тогда
+		РезультатJSON = ПрочитатьJSONизФайла(ПутьКФайлуJson);
+		ОбразецСтрокой = ДанныеВСтрокуJSON(РезультатJSON);
+
+		Ожидаем.Что(РезультатСтрокой).Равно(ОбразецСтрокой);
+	Иначе
+		Возврат; // !TODO: Тут вообще было бы хорошо помечать тест как broken
+	КонецЕсли;
+
+КонецПроцедуры
+
+
+Функция ПрочитатьJSONизФайла(ПутьКФайлу)
+	
+	ЧтениеJSON = Новый ЧтениеJSON();
+	ЧтениеJSON.ОткрытьФайл(ПутьКФайлу);
+	Результат = ПрочитатьJSON(ЧтениеJSON, Истина);
+	ЧтениеJSON.Закрыть();
+	
+	Возврат Результат;
+
+КонецФункции
+
+Функция ДанныеВСтрокуJSON(Данные)
+	
+	ПараметрыЗаписиJSON = Новый ПараметрыЗаписиJSON(
+		ПереносСтрокJSON.Нет
+	);
+	
+	ЗаписьJSON = Новый ЗаписьJSON();
+	ЗаписьJSON.УстановитьСтроку(ПараметрыЗаписиJSON);
+	ЗаписатьJSON(ЗаписьJSON, Данные);
+	Результат = ЗаписьJSON.Закрыть();
+	
+	Возврат Результат;
+
+КонецФункции
+
+
+&Тест
+&ОтображаемоеИмя("HU3P: Invalid Mapping in plain scalar")
+&Тег("mapping")
+&Тег("scalar")
+&Тег("error")
+Процедура Test_HU3P() Экспорт
+    ВыполнитьТест("HU3P");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("735Y: Spec Example 8.20. Block Node Types")
+&Тег("comment")
+&Тег("spec")
+&Тег("double")
+&Тег("folded")
+&Тег("tag")
+Процедура Test_735Y() Экспорт
+    ВыполнитьТест("735Y");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4GC6: Spec Example 7.7. Single Quoted Characters")
+&Тег("spec")
+&Тег("scalar")
+&Тег("1_3_err")
+Процедура Test_4GC6() Экспорт
+    ВыполнитьТест("4GC6");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("CTN5: Flow sequence with invalid extra comma")
+&Тег("sequence")
+&Тег("error")
+&Тег("flow")
+Процедура Test_CTN5() Экспорт
+    ВыполнитьТест("CTN5");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("S4GJ: Invalid text after block scalar indicator")
+&Тег("folded")
+&Тег("error")
+Процедура Test_S4GJ() Экспорт
+    ВыполнитьТест("S4GJ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("GH63: Mixed Block Mapping (explicit to implicit)")
+&Тег("mapping")
+&Тег("explicit_key")
+Процедура Test_GH63() Экспорт
+    ВыполнитьТест("GH63");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("UV7Q: Legal tab after indentation")
+&Тег("indent")
+&Тег("whitespace")
+Процедура Test_UV7Q() Экспорт
+    ВыполнитьТест("UV7Q");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("M5DY: Spec Example 2.11. Mapping between Sequences")
+&Тег("mapping")
+&Тег("explicit_key")
+&Тег("spec")
+&Тег("complex_key")
+&Тег("sequence")
+Процедура Test_M5DY() Экспорт
+    ВыполнитьТест("M5DY");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("3UYS: Escaped slash in double quotes")
+&Тег("double")
+Процедура Test_3UYS() Экспорт
+    ВыполнитьТест("3UYS");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("TS54: Folded Block Scalar")
+&Тег("folded")
+&Тег("scalar")
+&Тег("1_3_err")
+Процедура Test_TS54() Экспорт
+    ВыполнитьТест("TS54");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("HMK4: Spec Example 2.16. Indentation determines scope")
+&Тег("literal")
+&Тег("spec")
+&Тег("folded")
+Процедура Test_HMK4() Экспорт
+    ВыполнитьТест("HMK4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("8XDJ: Comment in plain multiline value")
+&Тег("comment")
+&Тег("scalar")
+&Тег("error")
+Процедура Test_8XDJ() Экспорт
+    ВыполнитьТест("8XDJ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("753E: Block Scalar Strip [1.3]")
+&Тег("literal")
+&Тег("1_3_mod")
+&Тег("whitespace")
+&Тег("scalar")
+Процедура Test_753E() Экспорт
+    ВыполнитьТест("753E");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("TL85: Spec Example 6.8. Flow Folding")
+&Тег("upto_1_2")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("double")
+&Тег("scalar")
+Процедура Test_TL85() Экспорт
+    ВыполнитьТест("TL85");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("7FWL: Spec Example 6.24. Verbatim Tags")
+&Тег("mapping")
+&Тег("unknown_tag")
+&Тег("spec")
+&Тег("tag")
+Процедура Test_7FWL() Экспорт
+    ВыполнитьТест("7FWL");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6BCT: Spec Example 6.3. Separation Spaces")
+&Тег("libyaml_err")
+&Тег("upto_1_2")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("sequence")
+Процедура Test_6BCT() Экспорт
+    ВыполнитьТест("6BCT");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("XLQ9: Multiline scalar that looks like a YAML directive")
+&Тег("directive")
+&Тег("scalar")
+Процедура Test_XLQ9() Экспорт
+    ВыполнитьТест("XLQ9");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("NAT4: Various empty or newline only quoted strings")
+&Тег("single")
+&Тег("whitespace")
+&Тег("double")
+&Тег("scalar")
+Процедура Test_NAT4() Экспорт
+    ВыполнитьТест("NAT4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("98YD: Spec Example 5.5. Comment Indicator")
+&Тег("empty")
+&Тег("comment")
+&Тег("spec")
+Процедура Test_98YD() Экспорт
+    ВыполнитьТест("98YD");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4JVG: Scalar value with two anchors")
+&Тег("mapping")
+&Тег("anchor")
+&Тег("error")
+Процедура Test_4JVG() Экспорт
+    ВыполнитьТест("4JVG");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("2XXW: Spec Example 2.25. Unordered Sets")
+&Тег("mapping")
+&Тег("unknown_tag")
+&Тег("explicit_key")
+&Тег("spec")
+Процедура Test_2XXW() Экспорт
+    ВыполнитьТест("2XXW");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("M9B4: Spec Example 8.7. Literal Scalar")
+&Тег("literal")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("scalar")
+&Тег("1_3_err")
+Процедура Test_M9B4() Экспорт
+    ВыполнитьТест("M9B4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("MZX3: Non-Specific Tags on Scalars")
+&Тег("folded")
+&Тег("scalar")
+Процедура Test_MZX3() Экспорт
+    ВыполнитьТест("MZX3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("RZP5: Various Trailing Comments [1.3]")
+&Тег("mapping")
+&Тег("1_3_mod")
+&Тег("comment")
+&Тег("anchor")
+&Тег("folded")
+Процедура Test_RZP5() Экспорт
+    ВыполнитьТест("RZP5");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9FMG: Multi-level Mapping Indent")
+&Тег("indent")
+&Тег("mapping")
+Процедура Test_9FMG() Экспорт
+    ВыполнитьТест("9FMG");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("K527: Spec Example 6.6. Line Folding")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("folded")
+&Тег("scalar")
+&Тег("1_3_err")
+Процедура Test_K527() Экспорт
+    ВыполнитьТест("K527");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("2LFX: Spec Example 6.13. Reserved Directives [1.3]")
+&Тег("1_3_mod")
+&Тег("spec")
+&Тег("directive")
+&Тег("double")
+&Тег("header")
+Процедура Test_2LFX() Экспорт
+    ВыполнитьТест("2LFX");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("M7A3: Spec Example 9.3. Bare Documents")
+&Тег("footer")
+&Тег("spec")
+&Тег("1_3_err")
+Процедура Test_M7A3() Экспорт
+    ВыполнитьТест("M7A3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("R4YG: Spec Example 8.2. Block Indentation Indicator")
+&Тег("libyaml_err")
+&Тег("literal")
+&Тег("upto_1_2")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("folded")
+&Тег("scalar")
+Процедура Test_R4YG() Экспорт
+    ВыполнитьТест("R4YG");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("SKE5: Anchor before zero indented sequence")
+&Тег("indent")
+&Тег("anchor")
+&Тег("sequence")
+Процедура Test_SKE5() Экспорт
+    ВыполнитьТест("SKE5");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9JBA: Invalid comment after end of flow sequence")
+&Тег("comment")
+&Тег("sequence")
+&Тег("error")
+&Тег("flow")
+Процедура Test_9JBA() Экспорт
+    ВыполнитьТест("9JBA");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("AZW3: Lookahead test cases")
+&Тег("mapping")
+&Тег("edge")
+Процедура Test_AZW3() Экспорт
+    ВыполнитьТест("AZW3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("HRE5: Double quoted scalar with escaped single quote")
+&Тег("single")
+&Тег("double")
+&Тег("error")
+Процедура Test_HRE5() Экспорт
+    ВыполнитьТест("HRE5");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6BFJ: Mapping, key and flow sequence item anchors")
+&Тег("mapping")
+&Тег("complex_key")
+&Тег("anchor")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_6BFJ() Экспорт
+    ВыполнитьТест("6BFJ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("3RLN/03: Leading tabs in double quoted")
+&Тег("whitespace")
+&Тег("double")
+Процедура Test_3RLN_03() Экспорт
+    ВыполнитьТест("3RLN/03");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("3RLN/04: Leading tabs in double quoted")
+&Тег("whitespace")
+&Тег("double")
+Процедура Test_3RLN_04() Экспорт
+    ВыполнитьТест("3RLN/04");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("3RLN/05: Leading tabs in double quoted")
+&Тег("whitespace")
+&Тег("double")
+Процедура Test_3RLN_05() Экспорт
+    ВыполнитьТест("3RLN/05");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("3RLN/02: Leading tabs in double quoted")
+&Тег("whitespace")
+&Тег("double")
+Процедура Test_3RLN_02() Экспорт
+    ВыполнитьТест("3RLN/02");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("3RLN/00: Leading tabs in double quoted")
+&Тег("whitespace")
+&Тег("double")
+Процедура Test_3RLN_00() Экспорт
+    ВыполнитьТест("3RLN/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("3RLN/01: Leading tabs in double quoted")
+&Тег("whitespace")
+&Тег("double")
+Процедура Test_3RLN_01() Экспорт
+    ВыполнитьТест("3RLN/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("U9NS: Spec Example 2.8. Play by Play Feed from a Game")
+&Тег("spec")
+&Тег("header")
+Процедура Test_U9NS() Экспорт
+    ВыполнитьТест("U9NS");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("SYW4: Spec Example 2.2. Mapping Scalars to Scalars")
+&Тег("comment")
+&Тег("spec")
+&Тег("scalar")
+Процедура Test_SYW4() Экспорт
+    ВыполнитьТест("SYW4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("S9E8: Spec Example 5.3. Block Structure Indicators")
+&Тег("mapping")
+&Тег("explicit_key")
+&Тег("spec")
+&Тег("sequence")
+Процедура Test_S9E8() Экспорт
+    ВыполнитьТест("S9E8");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("X4QW: Comment without whitespace after block scalar indicator")
+&Тег("comment")
+&Тег("whitespace")
+&Тег("folded")
+&Тег("error")
+Процедура Test_X4QW() Экспорт
+    ВыполнитьТест("X4QW");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("JKF3: Multiline unidented double quoted block key")
+&Тег("indent")
+Процедура Test_JKF3() Экспорт
+    ВыполнитьТест("JKF3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("55WF: Invalid escape in double quoted string")
+&Тег("double")
+&Тег("error")
+Процедура Test_55WF() Экспорт
+    ВыполнитьТест("55WF");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("58MP: Flow mapping edge cases")
+&Тег("mapping")
+&Тег("edge")
+&Тег("flow")
+Процедура Test_58MP() Экспорт
+    ВыполнитьТест("58MP");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("T5N4: Spec Example 8.7. Literal Scalar [1.3]")
+&Тег("literal")
+&Тег("1_3_mod")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("scalar")
+Процедура Test_T5N4() Экспорт
+    ВыполнитьТест("T5N4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("5BVJ: Spec Example 5.7. Block Scalar Indicators")
+&Тег("literal")
+&Тег("spec")
+&Тег("folded")
+&Тег("scalar")
+Процедура Test_5BVJ() Экспорт
+    ВыполнитьТест("5BVJ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("35KP: Tags for Root Objects")
+&Тег("mapping")
+&Тег("explicit_key")
+&Тег("tag")
+&Тег("header")
+Процедура Test_35KP() Экспорт
+    ВыполнитьТест("35KP");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("FRK4: Spec Example 7.3. Completely Empty Flow Nodes")
+&Тег("mapping")
+&Тег("explicit_key")
+&Тег("spec")
+&Тег("empty_key")
+&Тег("flow")
+Процедура Test_FRK4() Экспорт
+    ВыполнитьТест("FRK4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("K4SU: Multiple Entry Block Sequence")
+&Тег("sequence")
+Процедура Test_K4SU() Экспорт
+    ВыполнитьТест("K4SU");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DK3J: Zero indented block scalar with line that looks like a comment")
+&Тег("comment")
+&Тег("folded")
+&Тег("scalar")
+Процедура Test_DK3J() Экспорт
+    ВыполнитьТест("DK3J");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("CC74: Spec Example 6.20. Tag Handles")
+&Тег("unknown_tag")
+&Тег("spec")
+&Тег("directive")
+&Тег("tag")
+Процедура Test_CC74() Экспорт
+    ВыполнитьТест("CC74");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("UDR7: Spec Example 5.4. Flow Collection Indicators")
+&Тег("mapping")
+&Тег("spec")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_UDR7() Экспорт
+    ВыполнитьТест("UDR7");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("3MYT: Plain Scalar looking like key, comment, anchor and tag")
+&Тег("scalar")
+Процедура Test_3MYT() Экспорт
+    ВыполнитьТест("3MYT");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("BF9H: Trailing comment in multiline plain scalar")
+&Тег("comment")
+&Тег("scalar")
+&Тег("error")
+Процедура Test_BF9H() Экспорт
+    ВыполнитьТест("BF9H");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("8G76: Spec Example 6.10. Comment Lines")
+&Тег("empty")
+&Тег("comment")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("scalar")
+Процедура Test_8G76() Экспорт
+    ВыполнитьТест("8G76");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("GT5M: Node anchor in sequence")
+&Тег("anchor")
+&Тег("sequence")
+&Тег("error")
+Процедура Test_GT5M() Экспорт
+    ВыполнитьТест("GT5M");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6KGN: Anchor for empty node")
+&Тег("alias")
+&Тег("anchor")
+Процедура Test_6KGN() Экспорт
+    ВыполнитьТест("6KGN");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("N782: Invalid document markers in flow style")
+&Тег("footer")
+&Тег("edge")
+&Тег("error")
+&Тег("header")
+&Тег("flow")
+Процедура Test_N782() Экспорт
+    ВыполнитьТест("N782");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6VJK: Spec Example 2.15. Folded newlines are preserved for ""more indented"" and blank lines")
+&Тег("spec")
+&Тег("folded")
+&Тег("scalar")
+&Тег("1_3_err")
+Процедура Test_6VJK() Экспорт
+    ВыполнитьТест("6VJK");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4QFQ: Spec Example 8.2. Block Indentation Indicator [1.3]")
+&Тег("libyaml_err")
+&Тег("literal")
+&Тег("1_3_mod")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("folded")
+&Тег("scalar")
+Процедура Test_4QFQ() Экспорт
+    ВыполнитьТест("4QFQ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("UKK6/02: Syntax character edge cases")
+&Тег("edge")
+&Тег("empty_key")
+Процедура Test_UKK6_02() Экспорт
+    ВыполнитьТест("UKK6/02");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("UKK6/00: Syntax character edge cases")
+&Тег("edge")
+&Тег("empty_key")
+Процедура Test_UKK6_00() Экспорт
+    ВыполнитьТест("UKK6/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("UKK6/01: Syntax character edge cases")
+&Тег("edge")
+&Тег("empty_key")
+Процедура Test_UKK6_01() Экспорт
+    ВыполнитьТест("UKK6/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("EW3V: Wrong indendation in mapping")
+&Тег("indent")
+&Тег("mapping")
+&Тег("error")
+Процедура Test_EW3V() Экспорт
+    ВыполнитьТест("EW3V");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("SBG9: Flow Sequence in Flow Mapping")
+&Тег("mapping")
+&Тег("complex_key")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_SBG9() Экспорт
+    ВыполнитьТест("SBG9");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("8XYN: Anchor with unicode character")
+&Тег("anchor")
+Процедура Test_8XYN() Экспорт
+    ВыполнитьТест("8XYN");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("K858: Spec Example 8.6. Empty Scalar Chomping")
+&Тег("literal")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("folded")
+Процедура Test_K858() Экспорт
+    ВыполнитьТест("K858");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("2EBW: Allowed characters in keys")
+&Тег("mapping")
+&Тег("scalar")
+Процедура Test_2EBW() Экспорт
+    ВыполнитьТест("2EBW");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("52DL: Explicit Non-Specific Tag [1.3]")
+&Тег("1_3_mod")
+&Тег("tag")
+Процедура Test_52DL() Экспорт
+    ВыполнитьТест("52DL");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DK95/03: Tabs that look like indentation")
+&Тег("indent")
+&Тег("whitespace")
+Процедура Test_DK95_03() Экспорт
+    ВыполнитьТест("DK95/03");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DK95/04: Tabs that look like indentation")
+&Тег("indent")
+&Тег("whitespace")
+Процедура Test_DK95_04() Экспорт
+    ВыполнитьТест("DK95/04");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DK95/05: Tabs that look like indentation")
+&Тег("indent")
+&Тег("whitespace")
+Процедура Test_DK95_05() Экспорт
+    ВыполнитьТест("DK95/05");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DK95/02: Tabs that look like indentation")
+&Тег("indent")
+&Тег("whitespace")
+Процедура Test_DK95_02() Экспорт
+    ВыполнитьТест("DK95/02");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DK95/07: Tabs that look like indentation")
+&Тег("indent")
+&Тег("whitespace")
+Процедура Test_DK95_07() Экспорт
+    ВыполнитьТест("DK95/07");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DK95/00: Tabs that look like indentation")
+&Тег("indent")
+&Тег("whitespace")
+Процедура Test_DK95_00() Экспорт
+    ВыполнитьТест("DK95/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DK95/08: Tabs that look like indentation")
+&Тег("indent")
+&Тег("whitespace")
+Процедура Test_DK95_08() Экспорт
+    ВыполнитьТест("DK95/08");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DK95/01: Tabs that look like indentation")
+&Тег("indent")
+&Тег("whitespace")
+Процедура Test_DK95_01() Экспорт
+    ВыполнитьТест("DK95/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DK95/06: Tabs that look like indentation")
+&Тег("indent")
+&Тег("whitespace")
+Процедура Test_DK95_06() Экспорт
+    ВыполнитьТест("DK95/06");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("JQ4R: Spec Example 8.14. Block Sequence")
+&Тег("mapping")
+&Тег("spec")
+&Тег("sequence")
+Процедура Test_JQ4R() Экспорт
+    ВыполнитьТест("JQ4R");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("CFD4: Empty implicit key in single pair flow sequences")
+&Тег("empty_key")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_CFD4() Экспорт
+    ВыполнитьТест("CFD4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("ZVH3: Wrong indented sequence item")
+&Тег("indent")
+&Тег("sequence")
+&Тег("error")
+Процедура Test_ZVH3() Экспорт
+    ВыполнитьТест("ZVH3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("93WF: Spec Example 6.6. Line Folding [1.3]")
+&Тег("1_3_mod")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("folded")
+&Тег("scalar")
+Процедура Test_93WF() Экспорт
+    ВыполнитьТест("93WF");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("AB8U: Sequence entry that looks like two with wrong indentation")
+&Тег("sequence")
+&Тег("scalar")
+Процедура Test_AB8U() Экспорт
+    ВыполнитьТест("AB8U");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6JQW: Spec Example 2.13. In literals, newlines are preserved")
+&Тег("literal")
+&Тег("comment")
+&Тег("spec")
+&Тег("scalar")
+Процедура Test_6JQW() Экспорт
+    ВыполнитьТест("6JQW");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("L24T/00: Trailing line of spaces")
+&Тег("whitespace")
+Процедура Test_L24T_00() Экспорт
+    ВыполнитьТест("L24T/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("L24T/01: Trailing line of spaces")
+&Тег("whitespace")
+Процедура Test_L24T_01() Экспорт
+    ВыполнитьТест("L24T/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("236B: Invalid value after mapping")
+&Тег("mapping")
+&Тег("error")
+Процедура Test_236B() Экспорт
+    ВыполнитьТест("236B");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("96NN/00: Leading tab content in literals")
+&Тег("indent")
+&Тег("literal")
+&Тег("whitespace")
+Процедура Test_96NN_00() Экспорт
+    ВыполнитьТест("96NN/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("96NN/01: Leading tab content in literals")
+&Тег("indent")
+&Тег("literal")
+&Тег("whitespace")
+Процедура Test_96NN_01() Экспорт
+    ВыполнитьТест("96NN/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("5KJE: Spec Example 7.13. Flow Sequence")
+&Тег("spec")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_5KJE() Экспорт
+    ВыполнитьТест("5KJE");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DE56/03: Trailing tabs in double quoted")
+&Тег("whitespace")
+&Тег("double")
+Процедура Test_DE56_03() Экспорт
+    ВыполнитьТест("DE56/03");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DE56/04: Trailing tabs in double quoted")
+&Тег("whitespace")
+&Тег("double")
+Процедура Test_DE56_04() Экспорт
+    ВыполнитьТест("DE56/04");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DE56/05: Trailing tabs in double quoted")
+&Тег("whitespace")
+&Тег("double")
+Процедура Test_DE56_05() Экспорт
+    ВыполнитьТест("DE56/05");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DE56/02: Trailing tabs in double quoted")
+&Тег("whitespace")
+&Тег("double")
+Процедура Test_DE56_02() Экспорт
+    ВыполнитьТест("DE56/02");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DE56/00: Trailing tabs in double quoted")
+&Тег("whitespace")
+&Тег("double")
+Процедура Test_DE56_00() Экспорт
+    ВыполнитьТест("DE56/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DE56/01: Trailing tabs in double quoted")
+&Тег("whitespace")
+&Тег("double")
+Процедура Test_DE56_01() Экспорт
+    ВыполнитьТест("DE56/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("F6MC: More indented lines at the beginning of folded block scalars")
+&Тег("indent")
+&Тег("folded")
+Процедура Test_F6MC() Экспорт
+    ВыполнитьТест("F6MC");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("H2RW: Blank lines")
+&Тег("literal")
+&Тег("comment")
+&Тег("whitespace")
+&Тег("scalar")
+Процедура Test_H2RW() Экспорт
+    ВыполнитьТест("H2RW");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6JTT: Flow sequence without closing bracket")
+&Тег("sequence")
+&Тег("error")
+&Тег("flow")
+Процедура Test_6JTT() Экспорт
+    ВыполнитьТест("6JTT");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("NB6Z: Multiline plain value with tabs on empty lines")
+&Тег("whitespace")
+&Тег("scalar")
+Процедура Test_NB6Z() Экспорт
+    ВыполнитьТест("NB6Z");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("PBJ2: Spec Example 2.3. Mapping Scalars to Sequences")
+&Тег("mapping")
+&Тег("spec")
+&Тег("sequence")
+Процедура Test_PBJ2() Экспорт
+    ВыполнитьТест("PBJ2");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("RLU9: Sequence Indent")
+&Тег("indent")
+&Тег("sequence")
+Процедура Test_RLU9() Экспорт
+    ВыполнитьТест("RLU9");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("A984: Multiline Scalar in Mapping")
+&Тег("scalar")
+Процедура Test_A984() Экспорт
+    ВыполнитьТест("A984");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9J7A: Simple Mapping Indent")
+&Тег("indent")
+&Тег("mapping")
+&Тег("simple")
+Процедура Test_9J7A() Экспорт
+    ВыполнитьТест("9J7A");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("NHX8: Empty Lines at End of Document")
+&Тег("whitespace")
+&Тег("empty_key")
+Процедура Test_NHX8() Экспорт
+    ВыполнитьТест("NHX8");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9TFX: Spec Example 7.6. Double Quoted Lines [1.3]")
+&Тег("1_3_mod")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("double")
+&Тег("scalar")
+Процедура Test_9TFX() Экспорт
+    ВыполнитьТест("9TFX");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("D83L: Block scalar indicator order")
+&Тег("indent")
+&Тег("literal")
+Процедура Test_D83L() Экспорт
+    ВыполнитьТест("D83L");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("LP6E: Whitespace After Scalars in Flow")
+&Тег("whitespace")
+&Тег("scalar")
+&Тег("flow")
+Процедура Test_LP6E() Экспорт
+    ВыполнитьТест("LP6E");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("LX3P: Implicit Flow Mapping Key on one line")
+&Тег("mapping")
+&Тег("complex_key")
+&Тег("sequence")
+&Тег("1_3_err")
+&Тег("flow")
+Процедура Test_LX3P() Экспорт
+    ВыполнитьТест("LX3P");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6LVF: Spec Example 6.13. Reserved Directives")
+&Тег("spec")
+&Тег("directive")
+&Тег("double")
+&Тег("header")
+&Тег("1_3_err")
+Процедура Test_6LVF() Экспорт
+    ВыполнитьТест("6LVF");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("QB6E: Wrong indented multiline quoted scalar")
+&Тег("indent")
+&Тег("double")
+&Тег("error")
+Процедура Test_QB6E() Экспорт
+    ВыполнитьТест("QB6E");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6XDY: Two document start markers")
+&Тег("header")
+Процедура Test_6XDY() Экспорт
+    ВыполнитьТест("6XDY");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("7BMT: Node and Mapping Key Anchors [1.3]")
+&Тег("mapping")
+&Тег("1_3_mod")
+&Тег("comment")
+&Тег("anchor")
+Процедура Test_7BMT() Экспорт
+    ВыполнитьТест("7BMT");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("S7BG: Colon followed by comma")
+&Тег("scalar")
+Процедура Test_S7BG() Экспорт
+    ВыполнитьТест("S7BG");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("G4RS: Spec Example 2.17. Quoted Scalars")
+&Тег("spec")
+&Тег("scalar")
+Процедура Test_G4RS() Экспорт
+    ВыполнитьТест("G4RS");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4RWC: Trailing spaces after flow collection")
+&Тег("whitespace")
+&Тег("flow")
+Процедура Test_4RWC() Экспорт
+    ВыполнитьТест("4RWC");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9MMW: Single Pair Implicit Entries")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_9MMW() Экспорт
+    ВыполнитьТест("9MMW");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9BXH: Multiline doublequoted flow mapping key without value")
+&Тег("mapping")
+&Тег("double")
+&Тег("flow")
+Процедура Test_9BXH() Экспорт
+    ВыполнитьТест("9BXH");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9KBC: Mapping starting at --- line")
+&Тег("mapping")
+&Тег("error")
+&Тег("header")
+Процедура Test_9KBC() Экспорт
+    ВыполнитьТест("9KBC");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("HM87/00: Scalars in flow start with syntax char")
+&Тег("scalar")
+&Тег("flow")
+Процедура Test_HM87_00() Экспорт
+    ВыполнитьТест("HM87/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("HM87/01: Scalars in flow start with syntax char")
+&Тег("scalar")
+&Тег("flow")
+Процедура Test_HM87_01() Экспорт
+    ВыполнитьТест("HM87/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4MUZ/02: Flow mapping colon on line after key")
+&Тег("mapping")
+&Тег("flow")
+Процедура Test_4MUZ_02() Экспорт
+    ВыполнитьТест("4MUZ/02");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4MUZ/00: Flow mapping colon on line after key")
+&Тег("mapping")
+&Тег("flow")
+Процедура Test_4MUZ_00() Экспорт
+    ВыполнитьТест("4MUZ/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4MUZ/01: Flow mapping colon on line after key")
+&Тег("mapping")
+&Тег("flow")
+Процедура Test_4MUZ_01() Экспорт
+    ВыполнитьТест("4MUZ/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("S4T7: Document with footer")
+&Тег("mapping")
+&Тег("footer")
+Процедура Test_S4T7() Экспорт
+    ВыполнитьТест("S4T7");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6ZKB: Spec Example 9.6. Stream")
+&Тег("spec")
+&Тег("header")
+&Тег("1_3_err")
+Процедура Test_6ZKB() Экспорт
+    ВыполнитьТест("6ZKB");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("8UDB: Spec Example 7.14. Flow Sequence Entries")
+&Тег("spec")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_8UDB() Экспорт
+    ВыполнитьТест("8UDB");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("ZL4Z: Invalid nested mapping")
+&Тег("mapping")
+&Тег("error")
+Процедура Test_ZL4Z() Экспорт
+    ВыполнитьТест("ZL4Z");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("MYW6: Block Scalar Strip")
+&Тег("literal")
+&Тег("whitespace")
+&Тег("scalar")
+&Тег("1_3_err")
+Процедура Test_MYW6() Экспорт
+    ВыполнитьТест("MYW6");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("YD5X: Spec Example 2.5. Sequence of Sequences")
+&Тег("spec")
+&Тег("sequence")
+Процедура Test_YD5X() Экспорт
+    ВыполнитьТест("YD5X");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("652Z: Question mark at start of flow key")
+&Тег("flow")
+Процедура Test_652Z() Экспорт
+    ВыполнитьТест("652Z");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("CVW2: Invalid comment after comma")
+&Тег("comment")
+&Тег("sequence")
+&Тег("error")
+&Тег("flow")
+Процедура Test_CVW2() Экспорт
+    ВыполнитьТест("CVW2");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("RHX7: YAML directive without document end marker")
+&Тег("directive")
+&Тег("error")
+Процедура Test_RHX7() Экспорт
+    ВыполнитьТест("RHX7");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9MAG: Flow sequence with invalid comma at the beginning")
+&Тег("sequence")
+&Тег("error")
+&Тег("flow")
+Процедура Test_9MAG() Экспорт
+    ВыполнитьТест("9MAG");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("H7J7: Node anchor not indented")
+&Тег("indent")
+&Тег("anchor")
+&Тег("error")
+&Тег("tag")
+Процедура Test_H7J7() Экспорт
+    ВыполнитьТест("H7J7");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("T4YY: Spec Example 7.9. Single Quoted Lines [1.3]")
+&Тег("1_3_mod")
+&Тег("spec")
+&Тег("single")
+&Тег("whitespace")
+&Тег("scalar")
+Процедура Test_T4YY() Экспорт
+    ВыполнитьТест("T4YY");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6H3V: Backslashes in singlequotes")
+&Тег("single")
+&Тег("scalar")
+Процедура Test_6H3V() Экспорт
+    ВыполнитьТест("6H3V");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("7A4E: Spec Example 7.6. Double Quoted Lines")
+&Тег("upto_1_2")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("scalar")
+Процедура Test_7A4E() Экспорт
+    ВыполнитьТест("7A4E");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6PBE: Zero-indented sequences in explicit mapping keys")
+&Тег("mapping")
+&Тег("explicit_key")
+&Тег("sequence")
+Процедура Test_6PBE() Экспорт
+    ВыполнитьТест("6PBE");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("G9HC: Invalid anchor in zero indented sequence")
+&Тег("anchor")
+&Тег("sequence")
+&Тег("error")
+Процедура Test_G9HC() Экспорт
+    ВыполнитьТест("G9HC");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("YJV2: Dash in flow sequence")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_YJV2() Экспорт
+    ВыполнитьТест("YJV2");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4WA9: Literal scalars")
+&Тег("indent")
+&Тег("literal")
+Процедура Test_4WA9() Экспорт
+    ВыполнитьТест("4WA9");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4V8U: Plain scalar with backslashes")
+&Тег("scalar")
+Процедура Test_4V8U() Экспорт
+    ВыполнитьТест("4V8U");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("W4TN: Spec Example 9.5. Directives Documents")
+&Тег("footer")
+&Тег("spec")
+&Тег("header")
+&Тег("1_3_err")
+Процедура Test_W4TN() Экспорт
+    ВыполнитьТест("W4TN");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9U5K: Spec Example 2.12. Compact Nested Mapping")
+&Тег("mapping")
+&Тег("spec")
+&Тег("sequence")
+Процедура Test_9U5K() Экспорт
+    ВыполнитьТест("9U5K");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("FUP4: Flow Sequence in Flow Sequence")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_FUP4() Экспорт
+    ВыполнитьТест("FUP4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("BD7L: Invalid mapping after sequence")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("error")
+Процедура Test_BD7L() Экспорт
+    ВыполнитьТест("BD7L");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("F8F9: Spec Example 8.5. Chomping Trailing Lines")
+&Тег("literal")
+&Тег("comment")
+&Тег("spec")
+&Тег("scalar")
+Процедура Test_F8F9() Экспорт
+    ВыполнитьТест("F8F9");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("EXG3: Three dashes and content without space [1.3]")
+&Тег("1_3_mod")
+&Тег("scalar")
+Процедура Test_EXG3() Экспорт
+    ВыполнитьТест("EXG3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("7ZZ5: Empty flow collections")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_7ZZ5() Экспорт
+    ВыполнитьТест("7ZZ5");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Y2GN: Anchor with colon in the middle")
+&Тег("anchor")
+Процедура Test_Y2GN() Экспорт
+    ВыполнитьТест("Y2GN");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("V55R: Aliases in Block Sequence")
+&Тег("alias")
+&Тег("sequence")
+Процедура Test_V55R() Экспорт
+    ВыполнитьТест("V55R");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9DXL: Spec Example 9.6. Stream [1.3]")
+&Тег("1_3_mod")
+&Тег("spec")
+&Тег("header")
+Процедура Test_9DXL() Экспорт
+    ВыполнитьТест("9DXL");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9KAX: Various combinations of tags and anchors")
+&Тег("mapping")
+&Тег("anchor")
+&Тег("tag")
+&Тег("1_3_err")
+Процедура Test_9KAX() Экспорт
+    ВыполнитьТест("9KAX");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("J7PZ: Spec Example 2.26. Ordered Mappings")
+&Тег("mapping")
+&Тег("unknown_tag")
+&Тег("spec")
+&Тег("tag")
+Процедура Test_J7PZ() Экспорт
+    ВыполнитьТест("J7PZ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("J7VC: Empty Lines Between Mapping Elements")
+&Тег("mapping")
+&Тег("whitespace")
+Процедура Test_J7VC() Экспорт
+    ВыполнитьТест("J7VC");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("N4JP: Bad indentation in mapping")
+&Тег("indent")
+&Тег("mapping")
+&Тег("double")
+&Тег("error")
+Процедура Test_N4JP() Экспорт
+    ВыполнитьТест("N4JP");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("KSS4: Scalars on --- line")
+&Тег("anchor")
+&Тег("scalar")
+&Тег("header")
+&Тег("1_3_err")
+Процедура Test_KSS4() Экспорт
+    ВыполнитьТест("KSS4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("L94M: Tags in Explicit Mapping")
+&Тег("mapping")
+&Тег("explicit_key")
+&Тег("tag")
+Процедура Test_L94M() Экспорт
+    ВыполнитьТест("L94M");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("H7TQ: Extra words on %YAML directive")
+&Тег("directive")
+Процедура Test_H7TQ() Экспорт
+    ВыполнитьТест("H7TQ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("MXS3: Flow Mapping in Block Sequence")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_MXS3() Экспорт
+    ВыполнитьТест("MXS3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9SA2: Multiline double quoted flow mapping key")
+&Тег("mapping")
+&Тег("double")
+&Тег("flow")
+Процедура Test_9SA2() Экспорт
+    ВыполнитьТест("9SA2");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("W5VH: Allowed characters in alias")
+&Тег("alias")
+&Тег("1_3_err")
+Процедура Test_W5VH() Экспорт
+    ВыполнитьТест("W5VH");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("G992: Spec Example 8.9. Folded Scalar")
+&Тег("spec")
+&Тег("folded")
+&Тег("scalar")
+&Тег("1_3_err")
+Процедура Test_G992() Экспорт
+    ВыполнитьТест("G992");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9C9N: Wrong indented flow sequence")
+&Тег("indent")
+&Тег("sequence")
+&Тег("error")
+&Тег("flow")
+Процедура Test_9C9N() Экспорт
+    ВыполнитьТест("9C9N");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("S4JQ: Spec Example 6.28. Non-Specific Tags")
+&Тег("spec")
+&Тег("tag")
+Процедура Test_S4JQ() Экспорт
+    ВыполнитьТест("S4JQ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("XW4D: Various Trailing Comments")
+&Тег("explicit_key")
+&Тег("comment")
+&Тег("folded")
+&Тег("1_3_err")
+Процедура Test_XW4D() Экспорт
+    ВыполнитьТест("XW4D");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("7TMG: Comment in flow sequence before comma")
+&Тег("comment")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_7TMG() Экспорт
+    ВыполнитьТест("7TMG");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("CQ3W: Double quoted string without closing quote")
+&Тег("double")
+&Тег("error")
+Процедура Test_CQ3W() Экспорт
+    ВыполнитьТест("CQ3W");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("P94K: Spec Example 6.11. Multi-Line Comments")
+&Тег("comment")
+&Тег("spec")
+Процедура Test_P94K() Экспорт
+    ВыполнитьТест("P94K");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("5LLU: Block scalar with wrong indented line after spaces only")
+&Тег("whitespace")
+&Тег("folded")
+&Тег("error")
+Процедура Test_5LLU() Экспорт
+    ВыполнитьТест("5LLU");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("X38W: Aliases in Flow Objects")
+&Тег("alias")
+&Тег("complex_key")
+&Тег("flow")
+Процедура Test_X38W() Экспорт
+    ВыполнитьТест("X38W");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("57H4: Spec Example 8.22. Block Collection Nodes")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("tag")
+Процедура Test_57H4() Экспорт
+    ВыполнитьТест("57H4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DWX9: Spec Example 8.8. Literal Content")
+&Тег("literal")
+&Тег("comment")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("scalar")
+&Тег("1_3_err")
+Процедура Test_DWX9() Экспорт
+    ВыполнитьТест("DWX9");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("PW8X: Anchors on Empty Scalars")
+&Тег("explicit_key")
+&Тег("anchor")
+Процедура Test_PW8X() Экспорт
+    ВыполнитьТест("PW8X");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("PRH3: Spec Example 7.9. Single Quoted Lines")
+&Тег("upto_1_2")
+&Тег("spec")
+&Тег("single")
+&Тег("whitespace")
+&Тег("scalar")
+Процедура Test_PRH3() Экспорт
+    ВыполнитьТест("PRH3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("33X3: Three explicit integers in a block sequence")
+&Тег("sequence")
+&Тег("tag")
+Процедура Test_33X3() Экспорт
+    ВыполнитьТест("33X3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("229Q: Spec Example 2.4. Sequence of Mappings")
+&Тег("mapping")
+&Тег("spec")
+&Тег("sequence")
+Процедура Test_229Q() Экспорт
+    ВыполнитьТест("229Q");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("J9HZ: Spec Example 2.9. Single Document with Two Comments")
+&Тег("mapping")
+&Тег("comment")
+&Тег("spec")
+&Тег("sequence")
+Процедура Test_J9HZ() Экспорт
+    ВыполнитьТест("J9HZ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("D9TU: Single Pair Block Mapping")
+&Тег("mapping")
+&Тег("simple")
+Процедура Test_D9TU() Экспорт
+    ВыполнитьТест("D9TU");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("5TRB: Invalid document-start marker in doublequoted tring")
+&Тег("double")
+&Тег("error")
+&Тег("header")
+Процедура Test_5TRB() Экспорт
+    ВыполнитьТест("5TRB");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("M5C3: Spec Example 8.21. Block Scalar Nodes")
+&Тег("indent")
+&Тег("literal")
+&Тег("spec")
+&Тег("local_tag")
+&Тег("folded")
+&Тег("tag")
+&Тег("1_3_err")
+Процедура Test_M5C3() Экспорт
+    ВыполнитьТест("M5C3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("ZXT5: Implicit key followed by newline and adjacent value")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("error")
+&Тег("flow")
+Процедура Test_ZXT5() Экспорт
+    ВыполнитьТест("ZXT5");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("RR7F: Mixed Block Mapping (implicit to explicit)")
+&Тег("mapping")
+&Тег("explicit_key")
+Процедура Test_RR7F() Экспорт
+    ВыполнитьТест("RR7F");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("3ALJ: Block Sequence in Block Sequence")
+&Тег("sequence")
+Процедура Test_3ALJ() Экспорт
+    ВыполнитьТест("3ALJ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("74H7: Tags in Implicit Mapping")
+&Тег("mapping")
+&Тег("tag")
+Процедура Test_74H7() Экспорт
+    ВыполнитьТест("74H7");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("2G84/03: Literal modifers")
+&Тег("literal")
+&Тег("scalar")
+Процедура Test_2G84_03() Экспорт
+    ВыполнитьТест("2G84/03");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("2G84/02: Literal modifers")
+&Тег("literal")
+&Тег("scalar")
+Процедура Test_2G84_02() Экспорт
+    ВыполнитьТест("2G84/02");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("2G84/00: Literal modifers")
+&Тег("literal")
+&Тег("scalar")
+Процедура Test_2G84_00() Экспорт
+    ВыполнитьТест("2G84/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("2G84/01: Literal modifers")
+&Тег("literal")
+&Тег("scalar")
+Процедура Test_2G84_01() Экспорт
+    ВыполнитьТест("2G84/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("M6YH: Block sequence indentation")
+&Тег("indent")
+Процедура Test_M6YH() Экспорт
+    ВыполнитьТест("M6YH");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("ZK9H: Nested top level flow mapping")
+&Тег("indent")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_ZK9H() Экспорт
+    ВыполнитьТест("ZK9H");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("V9D5: Spec Example 8.19. Compact Block Mappings")
+&Тег("mapping")
+&Тег("explicit_key")
+&Тег("spec")
+&Тег("complex_key")
+Процедура Test_V9D5() Экспорт
+    ВыполнитьТест("V9D5");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("TD5N: Invalid scalar after sequence")
+&Тег("sequence")
+&Тег("scalar")
+&Тег("error")
+Процедура Test_TD5N() Экспорт
+    ВыполнитьТест("TD5N");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("J3BT: Spec Example 5.12. Tabs and Spaces")
+&Тег("upto_1_2")
+&Тег("spec")
+&Тег("whitespace")
+Процедура Test_J3BT() Экспорт
+    ВыполнитьТест("J3BT");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("93JH: Block Mappings in Block Sequence")
+&Тег("mapping")
+&Тег("sequence")
+Процедура Test_93JH() Экспорт
+    ВыполнитьТест("93JH");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("SF5V: Duplicate YAML directive")
+&Тег("directive")
+&Тег("error")
+Процедура Test_SF5V() Экспорт
+    ВыполнитьТест("SF5V");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("F3CP: Nested flow collections on one line")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_F3CP() Экспорт
+    ВыполнитьТест("F3CP");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("RTP8: Spec Example 9.2. Document Markers")
+&Тег("footer")
+&Тег("spec")
+&Тег("header")
+Процедура Test_RTP8() Экспорт
+    ВыполнитьТест("RTP8");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("K54U: Tab after document header")
+&Тег("whitespace")
+&Тег("header")
+Процедура Test_K54U() Экспорт
+    ВыполнитьТест("K54U");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("SSW6: Spec Example 7.7. Single Quoted Characters [1.3]")
+&Тег("1_3_mod")
+&Тег("spec")
+&Тег("single")
+&Тег("scalar")
+Процедура Test_SSW6() Экспорт
+    ВыполнитьТест("SSW6");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("7MNF: Missing colon")
+&Тег("mapping")
+&Тег("error")
+Процедура Test_7MNF() Экспорт
+    ВыполнитьТест("7MNF");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("C4HZ: Spec Example 2.24. Global Tags")
+&Тег("alias")
+&Тег("spec")
+&Тег("directive")
+&Тег("local_tag")
+&Тег("tag")
+Процедура Test_C4HZ() Экспорт
+    ВыполнитьТест("C4HZ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("L9U5: Spec Example 7.11. Plain Implicit Keys")
+&Тег("mapping")
+&Тег("spec")
+&Тег("flow")
+Процедура Test_L9U5() Экспорт
+    ВыполнитьТест("L9U5");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("KS4U: Invalid item after end of flow sequence")
+&Тег("sequence")
+&Тег("error")
+&Тег("flow")
+Процедура Test_KS4U() Экспорт
+    ВыполнитьТест("KS4U");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Q88A: Spec Example 7.23. Flow Content")
+&Тег("mapping")
+&Тег("spec")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_Q88A() Экспорт
+    ВыполнитьТест("Q88A");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("LQZ7: Spec Example 7.4. Double Quoted Implicit Keys")
+&Тег("spec")
+&Тег("scalar")
+&Тег("flow")
+Процедура Test_LQZ7() Экспорт
+    ВыполнитьТест("LQZ7");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("36F6: Multiline plain scalar with empty line")
+&Тег("mapping")
+&Тег("scalar")
+Процедура Test_36F6() Экспорт
+    ВыполнитьТест("36F6");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DMG6: Wrong indendation in Map")
+&Тег("indent")
+&Тег("mapping")
+&Тег("error")
+Процедура Test_DMG6() Экспорт
+    ВыполнитьТест("DMG6");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("QLJ7: Tag shorthand used in documents but only defined in the first")
+&Тег("directive")
+&Тег("error")
+&Тег("tag")
+Процедура Test_QLJ7() Экспорт
+    ВыполнитьТест("QLJ7");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("SU74: Anchor and alias as mapping key")
+&Тег("mapping")
+&Тег("alias")
+&Тег("anchor")
+&Тег("error")
+Процедура Test_SU74() Экспорт
+    ВыполнитьТест("SU74");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("C2DT: Spec Example 7.18. Flow Mapping Adjacent Values")
+&Тег("mapping")
+&Тег("spec")
+&Тег("flow")
+Процедура Test_C2DT() Экспорт
+    ВыполнитьТест("C2DT");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("K3WX: Colon and adjacent value after comment on next line")
+&Тег("mapping")
+&Тег("comment")
+&Тег("flow")
+Процедура Test_K3WX() Экспорт
+    ВыполнитьТест("K3WX");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9CWY: Invalid scalar at the end of mapping")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("error")
+Процедура Test_9CWY() Экспорт
+    ВыполнитьТест("9CWY");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("U44R: Bad indentation in mapping (2)")
+&Тег("indent")
+&Тег("mapping")
+&Тег("double")
+&Тег("error")
+Процедура Test_U44R() Экспорт
+    ВыполнитьТест("U44R");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("CN3R: Various location of anchors in flow sequence")
+&Тег("mapping")
+&Тег("anchor")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_CN3R() Экспорт
+    ВыполнитьТест("CN3R");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("HS5T: Spec Example 7.12. Plain Lines")
+&Тег("upto_1_2")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("scalar")
+Процедура Test_HS5T() Экспорт
+    ВыполнитьТест("HS5T");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9MQT/00: Scalar doc with '...' in content")
+&Тег("double")
+&Тег("scalar")
+Процедура Test_9MQT_00() Экспорт
+    ВыполнитьТест("9MQT/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9MQT/01: Scalar doc with '...' in content")
+&Тег("double")
+&Тег("scalar")
+Процедура Test_9MQT_01() Экспорт
+    ВыполнитьТест("9MQT/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4HVU: Wrong indendation in Sequence")
+&Тег("indent")
+&Тег("sequence")
+&Тег("error")
+Процедура Test_4HVU() Экспорт
+    ВыполнитьТест("4HVU");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("M7NX: Nested flow collections")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_M7NX() Экспорт
+    ВыполнитьТест("M7NX");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("GDY7: Comment that looks like a mapping key")
+&Тег("mapping")
+&Тег("comment")
+&Тег("error")
+Процедура Test_GDY7() Экспорт
+    ВыполнитьТест("GDY7");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("EHF6: Tags for Flow Objects")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("tag")
+&Тег("flow")
+Процедура Test_EHF6() Экспорт
+    ВыполнитьТест("EHF6");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("B63P: Directive without document")
+&Тег("document")
+&Тег("directive")
+&Тег("error")
+Процедура Test_B63P() Экспорт
+    ВыполнитьТест("B63P");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("JHB9: Spec Example 2.7. Two Documents in a Stream")
+&Тег("spec")
+&Тег("header")
+Процедура Test_JHB9() Экспорт
+    ВыполнитьТест("JHB9");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("P76L: Spec Example 6.19. Secondary Tag Handle")
+&Тег("unknown_tag")
+&Тег("spec")
+&Тег("tag")
+&Тег("header")
+Процедура Test_P76L() Экспорт
+    ВыполнитьТест("P76L");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Q5MG: Tab at beginning of line followed by a flow mapping")
+&Тег("whitespace")
+&Тег("flow")
+Процедура Test_Q5MG() Экспорт
+    ВыполнитьТест("Q5MG");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("RXY3: Invalid document-end marker in single quoted string")
+&Тег("footer")
+&Тег("single")
+&Тег("error")
+Процедура Test_RXY3() Экспорт
+    ВыполнитьТест("RXY3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("2AUY: Tags in Block Sequence")
+&Тег("sequence")
+&Тег("tag")
+Процедура Test_2AUY() Экспорт
+    ВыполнитьТест("2AUY");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("HWV9: Document-end marker")
+&Тег("footer")
+Процедура Test_HWV9() Экспорт
+    ВыполнитьТест("HWV9");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("CML9: Missing comma in flow")
+&Тег("comment")
+&Тег("error")
+&Тег("flow")
+Процедура Test_CML9() Экспорт
+    ВыполнитьТест("CML9");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("NP9H: Spec Example 7.5. Double Quoted Line Breaks")
+&Тег("upto_1_2")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("double")
+&Тег("scalar")
+Процедура Test_NP9H() Экспорт
+    ВыполнитьТест("NP9H");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("S98Z: Block scalar with more spaces than first content line")
+&Тег("comment")
+&Тег("whitespace")
+&Тег("folded")
+&Тег("scalar")
+&Тег("error")
+Процедура Test_S98Z() Экспорт
+    ВыполнитьТест("S98Z");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("JTV5: Block Mapping with Multiline Scalars")
+&Тег("mapping")
+&Тег("explicit_key")
+&Тег("scalar")
+Процедура Test_JTV5() Экспорт
+    ВыполнитьТест("JTV5");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("KH5V/02: Inline tabs in double quoted")
+&Тег("whitespace")
+&Тег("double")
+Процедура Test_KH5V_02() Экспорт
+    ВыполнитьТест("KH5V/02");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("KH5V/00: Inline tabs in double quoted")
+&Тег("whitespace")
+&Тег("double")
+Процедура Test_KH5V_00() Экспорт
+    ВыполнитьТест("KH5V/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("KH5V/01: Inline tabs in double quoted")
+&Тег("whitespace")
+&Тег("double")
+Процедура Test_KH5V_01() Экспорт
+    ВыполнитьТест("KH5V/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4EJS: Invalid tabs as indendation in a mapping")
+&Тег("mapping")
+&Тег("whitespace")
+&Тег("error")
+Процедура Test_4EJS() Экспорт
+    ВыполнитьТест("4EJS");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("27NA: Spec Example 5.9. Directive Indicator")
+&Тег("spec")
+&Тег("directive")
+&Тег("1_3_err")
+Процедура Test_27NA() Экспорт
+    ВыполнитьТест("27NA");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("H3Z8: Literal unicode")
+&Тег("scalar")
+Процедура Test_H3Z8() Экспорт
+    ВыполнитьТест("H3Z8");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("565N: Construct Binary")
+&Тег("unknown_tag")
+&Тег("tag")
+Процедура Test_565N() Экспорт
+    ВыполнитьТест("565N");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("5TYM: Spec Example 6.21. Local Tag Prefix")
+&Тег("spec")
+&Тег("directive")
+&Тег("local_tag")
+&Тег("tag")
+Процедура Test_5TYM() Экспорт
+    ВыполнитьТест("5TYM");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("82AN: Three dashes and content without space")
+&Тег("scalar")
+&Тег("1_3_err")
+Процедура Test_82AN() Экспорт
+    ВыполнитьТест("82AN");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("P2EQ: Invalid sequene item on same line as previous item")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("error")
+&Тег("flow")
+Процедура Test_P2EQ() Экспорт
+    ВыполнитьТест("P2EQ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("QT73: Comment and document-end marker")
+&Тег("footer")
+&Тег("comment")
+Процедура Test_QT73() Экспорт
+    ВыполнитьТест("QT73");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("5WE3: Spec Example 8.17. Explicit Block Mapping Entries")
+&Тег("mapping")
+&Тег("literal")
+&Тег("explicit_key")
+&Тег("comment")
+&Тег("spec")
+&Тег("sequence")
+Процедура Test_5WE3() Экспорт
+    ВыполнитьТест("5WE3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("CPZ3: Doublequoted scalar starting with a tab")
+&Тег("double")
+&Тег("scalar")
+Процедура Test_CPZ3() Экспорт
+    ВыполнитьТест("CPZ3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("WZ62: Spec Example 7.2. Empty Content")
+&Тег("spec")
+&Тег("scalar")
+&Тег("tag")
+&Тег("flow")
+Процедура Test_WZ62() Экспорт
+    ВыполнитьТест("WZ62");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("BEC7: Spec Example 6.14. “YAML” directive")
+&Тег("spec")
+&Тег("directive")
+Процедура Test_BEC7() Экспорт
+    ВыполнитьТест("BEC7");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("2CMS: Invalid mapping in plain multiline")
+&Тег("mapping")
+&Тег("error")
+Процедура Test_2CMS() Экспорт
+    ВыполнитьТест("2CMS");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("8CWC: Plain mapping key ending with colon")
+&Тег("mapping")
+&Тег("scalar")
+Процедура Test_8CWC() Экспорт
+    ВыполнитьТест("8CWC");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("LE5A: Spec Example 7.24. Flow Nodes")
+&Тег("alias")
+&Тег("spec")
+&Тег("tag")
+Процедура Test_LE5A() Экспорт
+    ВыполнитьТест("LE5A");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("LHL4: Invalid tag")
+&Тег("error")
+&Тег("tag")
+Процедура Test_LHL4() Экспорт
+    ВыполнитьТест("LHL4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("62EZ: Invalid block mapping key on same line as previous key")
+&Тег("mapping")
+&Тег("error")
+&Тег("flow")
+Процедура Test_62EZ() Экспорт
+    ВыполнитьТест("62EZ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("3HFZ: Invalid content after document end marker")
+&Тег("footer")
+&Тег("error")
+Процедура Test_3HFZ() Экспорт
+    ВыполнитьТест("3HFZ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("5NYZ: Spec Example 6.9. Separated Comment")
+&Тег("mapping")
+&Тег("comment")
+&Тег("spec")
+Процедура Test_5NYZ() Экспорт
+    ВыполнитьТест("5NYZ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("3GZX: Spec Example 7.1. Alias Nodes")
+&Тег("mapping")
+&Тег("alias")
+&Тег("spec")
+Процедура Test_3GZX() Экспорт
+    ВыполнитьТест("3GZX");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6FWR: Block Scalar Keep")
+&Тег("literal")
+&Тег("whitespace")
+&Тег("scalar")
+Процедура Test_6FWR() Экспорт
+    ВыполнитьТест("6FWR");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("D88J: Flow Sequence in Block Mapping")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_D88J() Экспорт
+    ВыполнитьТест("D88J");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("MUS6/03: Directive variants")
+&Тег("directive")
+Процедура Test_MUS6_03() Экспорт
+    ВыполнитьТест("MUS6/03");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("MUS6/04: Directive variants")
+&Тег("directive")
+Процедура Test_MUS6_04() Экспорт
+    ВыполнитьТест("MUS6/04");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("MUS6/05: Directive variants")
+&Тег("directive")
+Процедура Test_MUS6_05() Экспорт
+    ВыполнитьТест("MUS6/05");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("MUS6/02: Directive variants")
+&Тег("directive")
+Процедура Test_MUS6_02() Экспорт
+    ВыполнитьТест("MUS6/02");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("MUS6/00: Directive variants")
+&Тег("directive")
+Процедура Test_MUS6_00() Экспорт
+    ВыполнитьТест("MUS6/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("MUS6/01: Directive variants")
+&Тег("directive")
+Процедура Test_MUS6_01() Экспорт
+    ВыполнитьТест("MUS6/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("MUS6/06: Directive variants")
+&Тег("directive")
+Процедура Test_MUS6_06() Экспорт
+    ВыполнитьТест("MUS6/06");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6S55: Invalid scalar at the end of sequence")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("error")
+Процедура Test_6S55() Экспорт
+    ВыполнитьТест("6S55");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("JS2J: Spec Example 6.29. Node Anchors")
+&Тег("alias")
+&Тег("spec")
+Процедура Test_JS2J() Экспорт
+    ВыполнитьТест("JS2J");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("FTA2: Single block sequence with anchor and explicit document start")
+&Тег("anchor")
+&Тег("sequence")
+&Тег("header")
+Процедура Test_FTA2() Экспорт
+    ВыполнитьТест("FTA2");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("2JQS: Block Mapping with Missing Keys")
+&Тег("mapping")
+&Тег("duplicate_key")
+&Тег("empty_key")
+Процедура Test_2JQS() Экспорт
+    ВыполнитьТест("2JQS");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6JWB: Tags for Block Objects")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("tag")
+Процедура Test_6JWB() Экспорт
+    ВыполнитьТест("6JWB");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DFF7: Spec Example 7.16. Flow Mapping Entries")
+&Тег("mapping")
+&Тег("explicit_key")
+&Тег("spec")
+&Тег("flow")
+Процедура Test_DFF7() Экспорт
+    ВыполнитьТест("DFF7");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("E76Z: Aliases in Implicit Block Mapping")
+&Тег("mapping")
+&Тег("alias")
+Процедура Test_E76Z() Экспорт
+    ВыполнитьТест("E76Z");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("BU8L: Node Anchor and Tag on Seperate Lines")
+&Тег("indent")
+&Тег("anchor")
+&Тег("tag")
+&Тег("1_3_err")
+Процедура Test_BU8L() Экспорт
+    ВыполнитьТест("BU8L");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("QF4Y: Spec Example 7.19. Single Pair Flow Mappings")
+&Тег("mapping")
+&Тег("spec")
+&Тег("flow")
+Процедура Test_QF4Y() Экспорт
+    ВыполнитьТест("QF4Y");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("EB22: Missing document-end marker before directive")
+&Тег("footer")
+&Тег("directive")
+&Тег("error")
+Процедура Test_EB22() Экспорт
+    ВыполнитьТест("EB22");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("NJ66: Multiline plain flow mapping key")
+&Тег("mapping")
+&Тег("flow")
+Процедура Test_NJ66() Экспорт
+    ВыполнитьТест("NJ66");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6CA3: Tab indented top flow")
+&Тег("indent")
+&Тег("whitespace")
+Процедура Test_6CA3() Экспорт
+    ВыполнитьТест("6CA3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4ZYM: Spec Example 6.4. Line Prefixes")
+&Тег("literal")
+&Тег("upto_1_2")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("double")
+&Тег("scalar")
+Процедура Test_4ZYM() Экспорт
+    ВыполнитьТест("4ZYM");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("A6F9: Spec Example 8.4. Chomping Final Line Break")
+&Тег("literal")
+&Тег("spec")
+&Тег("scalar")
+Процедура Test_A6F9() Экспорт
+    ВыполнитьТест("A6F9");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Y79Y/007: Tabs in various contexts")
+&Тег("whitespace")
+Процедура Test_Y79Y_007() Экспорт
+    ВыполнитьТест("Y79Y/007");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Y79Y/000: Tabs in various contexts")
+&Тег("whitespace")
+Процедура Test_Y79Y_000() Экспорт
+    ВыполнитьТест("Y79Y/000");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Y79Y/009: Tabs in various contexts")
+&Тег("whitespace")
+Процедура Test_Y79Y_009() Экспорт
+    ВыполнитьТест("Y79Y/009");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Y79Y/008: Tabs in various contexts")
+&Тег("whitespace")
+Процедура Test_Y79Y_008() Экспорт
+    ВыполнитьТест("Y79Y/008");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Y79Y/001: Tabs in various contexts")
+&Тег("whitespace")
+Процедура Test_Y79Y_001() Экспорт
+    ВыполнитьТест("Y79Y/001");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Y79Y/006: Tabs in various contexts")
+&Тег("whitespace")
+Процедура Test_Y79Y_006() Экспорт
+    ВыполнитьТест("Y79Y/006");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Y79Y/010: Tabs in various contexts")
+&Тег("whitespace")
+Процедура Test_Y79Y_010() Экспорт
+    ВыполнитьТест("Y79Y/010");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Y79Y/003: Tabs in various contexts")
+&Тег("whitespace")
+Процедура Test_Y79Y_003() Экспорт
+    ВыполнитьТест("Y79Y/003");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Y79Y/004: Tabs in various contexts")
+&Тег("whitespace")
+Процедура Test_Y79Y_004() Экспорт
+    ВыполнитьТест("Y79Y/004");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Y79Y/005: Tabs in various contexts")
+&Тег("whitespace")
+Процедура Test_Y79Y_005() Экспорт
+    ВыполнитьТест("Y79Y/005");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Y79Y/002: Tabs in various contexts")
+&Тег("whitespace")
+Процедура Test_Y79Y_002() Экспорт
+    ВыполнитьТест("Y79Y/002");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6WPF: Spec Example 6.8. Flow Folding [1.3]")
+&Тег("1_3_mod")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("double")
+&Тег("scalar")
+Процедура Test_6WPF() Экспорт
+    ВыполнитьТест("6WPF");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("7Z25: Bare document after document end marker")
+&Тег("footer")
+Процедура Test_7Z25() Экспорт
+    ВыполнитьТест("7Z25");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9YRD: Multiline Scalar at Top Level")
+&Тег("whitespace")
+&Тег("scalar")
+&Тег("1_3_err")
+Процедура Test_9YRD() Экспорт
+    ВыполнитьТест("9YRD");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("JEF9/02: Trailing whitespace in streams")
+&Тег("literal")
+Процедура Test_JEF9_02() Экспорт
+    ВыполнитьТест("JEF9/02");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("JEF9/00: Trailing whitespace in streams")
+&Тег("literal")
+Процедура Test_JEF9_00() Экспорт
+    ВыполнитьТест("JEF9/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("JEF9/01: Trailing whitespace in streams")
+&Тег("literal")
+Процедура Test_JEF9_01() Экспорт
+    ВыполнитьТест("JEF9/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("VJP3/00: Flow collections over many lines")
+&Тег("indent")
+&Тег("flow")
+Процедура Test_VJP3_00() Экспорт
+    ВыполнитьТест("VJP3/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("VJP3/01: Flow collections over many lines")
+&Тег("indent")
+&Тег("flow")
+Процедура Test_VJP3_01() Экспорт
+    ВыполнитьТест("VJP3/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("7T8X: Spec Example 8.10. Folded Lines - 8.13. Final Empty Lines")
+&Тег("comment")
+&Тег("spec")
+&Тег("folded")
+&Тег("scalar")
+&Тег("1_3_err")
+Процедура Test_7T8X() Экспорт
+    ВыполнитьТест("7T8X");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("UGM3: Spec Example 2.27. Invoice")
+&Тег("mapping")
+&Тег("alias")
+&Тег("unknown_tag")
+&Тег("literal")
+&Тег("spec")
+&Тег("sequence")
+&Тег("tag")
+Процедура Test_UGM3() Экспорт
+    ВыполнитьТест("UGM3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("W9L4: Literal block scalar with more spaces in first line")
+&Тег("literal")
+&Тег("whitespace")
+&Тег("error")
+Процедура Test_W9L4() Экспорт
+    ВыполнитьТест("W9L4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("87E4: Spec Example 7.8. Single Quoted Implicit Keys")
+&Тег("mapping")
+&Тег("spec")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_87E4() Экспорт
+    ВыполнитьТест("87E4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("U99R: Invalid comma in tag")
+&Тег("error")
+&Тег("tag")
+Процедура Test_U99R() Экспорт
+    ВыполнитьТест("U99R");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Q4CL: Trailing content after quoted value")
+&Тег("mapping")
+&Тег("double")
+&Тег("error")
+Процедура Test_Q4CL() Экспорт
+    ВыполнитьТест("Q4CL");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("R52L: Nested flow mapping sequence and mappings")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_R52L() Экспорт
+    ВыполнитьТест("R52L");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("FQ7F: Spec Example 2.1. Sequence of Scalars")
+&Тег("spec")
+&Тег("sequence")
+Процедура Test_FQ7F() Экспорт
+    ВыполнитьТест("FQ7F");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("BS4K: Comment between plain scalar lines")
+&Тег("scalar")
+&Тег("error")
+Процедура Test_BS4K() Экспорт
+    ВыполнитьТест("BS4K");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9WXW: Spec Example 6.18. Primary Tag Handle")
+&Тег("unknown_tag")
+&Тег("spec")
+&Тег("directive")
+&Тег("local_tag")
+&Тег("tag")
+&Тег("1_3_err")
+Процедура Test_9WXW() Экспорт
+    ВыполнитьТест("9WXW");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("JY7Z: Trailing content that looks like a mapping")
+&Тег("mapping")
+&Тег("double")
+&Тег("error")
+Процедура Test_JY7Z() Экспорт
+    ВыполнитьТест("JY7Z");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6CK3: Spec Example 6.26. Tag Shorthands")
+&Тег("spec")
+&Тег("local_tag")
+&Тег("tag")
+Процедура Test_6CK3() Экспорт
+    ВыполнитьТест("6CK3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4CQQ: Spec Example 2.18. Multi-line Flow Scalars")
+&Тег("spec")
+&Тег("scalar")
+Процедура Test_4CQQ() Экспорт
+    ВыполнитьТест("4CQQ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("G7JE: Multiline implicit keys")
+&Тег("mapping")
+&Тег("error")
+Процедура Test_G7JE() Экспорт
+    ВыполнитьТест("G7JE");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("NKF9: Empty keys in block and flow mapping")
+&Тег("mapping")
+&Тег("empty_key")
+Процедура Test_NKF9() Экспорт
+    ВыполнитьТест("NKF9");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("C2SP: Flow Mapping Key on two lines")
+&Тег("mapping")
+&Тег("error")
+&Тег("flow")
+Процедура Test_C2SP() Экспорт
+    ВыполнитьТест("C2SP");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9MMA: Directive by itself with no document")
+&Тег("directive")
+&Тег("error")
+Процедура Test_9MMA() Экспорт
+    ВыполнитьТест("9MMA");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("CT4Q: Spec Example 7.20. Single Pair Explicit Entry")
+&Тег("mapping")
+&Тег("explicit_key")
+&Тег("spec")
+&Тег("flow")
+Процедура Test_CT4Q() Экспорт
+    ВыполнитьТест("CT4Q");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("26DV: Whitespace around colon in mappings")
+&Тег("mapping")
+&Тег("alias")
+&Тег("whitespace")
+Процедура Test_26DV() Экспорт
+    ВыполнитьТест("26DV");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("96L6: Spec Example 2.14. In the folded scalars, newlines become spaces")
+&Тег("spec")
+&Тег("folded")
+&Тег("scalar")
+Процедура Test_96L6() Экспорт
+    ВыполнитьТест("96L6");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("T833: Flow mapping missing a separating comma")
+&Тег("mapping")
+&Тег("error")
+&Тег("flow")
+Процедура Test_T833() Экспорт
+    ВыполнитьТест("T833");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("8QBE: Block Sequence in Block Mapping")
+&Тег("mapping")
+&Тег("sequence")
+Процедура Test_8QBE() Экспорт
+    ВыполнитьТест("8QBE");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("J5UC: Multiple Pair Block Mapping")
+&Тег("mapping")
+Процедура Test_J5UC() Экспорт
+    ВыполнитьТест("J5UC");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Q9WF: Spec Example 6.12. Separation Spaces")
+&Тег("comment")
+&Тег("spec")
+&Тег("complex_key")
+&Тег("whitespace")
+&Тег("1_3_err")
+&Тег("flow")
+Процедура Test_Q9WF() Экспорт
+    ВыполнитьТест("Q9WF");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("D49Q: Multiline single quoted implicit keys")
+&Тег("mapping")
+&Тег("single")
+&Тег("error")
+Процедура Test_D49Q() Экспорт
+    ВыполнитьТест("D49Q");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("65WH: Single Entry Block Sequence")
+&Тег("sequence")
+Процедура Test_65WH() Экспорт
+    ВыполнитьТест("65WH");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("MJS9: Spec Example 6.7. Block Folding")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("folded")
+&Тег("scalar")
+&Тег("1_3_err")
+Процедура Test_MJS9() Экспорт
+    ВыполнитьТест("MJS9");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("FH7J: Tags on Empty Scalars")
+&Тег("scalar")
+&Тег("tag")
+Процедура Test_FH7J() Экспорт
+    ВыполнитьТест("FH7J");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("5U3A: Sequence on same Line as Mapping Key")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("error")
+Процедура Test_5U3A() Экспорт
+    ВыполнитьТест("5U3A");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("U3XV: Node and Mapping Key Anchors")
+&Тег("comment")
+&Тег("anchor")
+&Тег("1_3_err")
+Процедура Test_U3XV() Экспорт
+    ВыполнитьТест("U3XV");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("5GBF: Spec Example 6.5. Empty Lines")
+&Тег("literal")
+&Тег("upto_1_2")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("double")
+&Тег("scalar")
+Процедура Test_5GBF() Экспорт
+    ВыполнитьТест("5GBF");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DBG4: Spec Example 7.10. Plain Characters")
+&Тег("spec")
+&Тег("sequence")
+&Тег("scalar")
+&Тег("flow")
+Процедура Test_DBG4() Экспорт
+    ВыполнитьТест("DBG4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("XV9V: Spec Example 6.5. Empty Lines [1.3]")
+&Тег("literal")
+&Тег("1_3_mod")
+&Тег("spec")
+&Тег("scalar")
+Процедура Test_XV9V() Экспорт
+    ВыполнитьТест("XV9V");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("SR86: Anchor plus Alias")
+&Тег("alias")
+&Тег("error")
+Процедура Test_SR86() Экспорт
+    ВыполнитьТест("SR86");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("W42U: Spec Example 8.15. Block Sequence Entry Types")
+&Тег("literal")
+&Тег("comment")
+&Тег("spec")
+&Тег("sequence")
+Процедура Test_W42U() Экспорт
+    ВыполнитьТест("W42U");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("KK5P: Various combinations of explicit block mappings")
+&Тег("mapping")
+&Тег("explicit_key")
+&Тег("sequence")
+Процедура Test_KK5P() Экспорт
+    ВыполнитьТест("KK5P");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("HMQ5: Spec Example 6.23. Node Properties")
+&Тег("alias")
+&Тег("spec")
+&Тег("tag")
+Процедура Test_HMQ5() Экспорт
+    ВыполнитьТест("HMQ5");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("SM9W/00: Single character streams")
+&Тег("sequence")
+Процедура Test_SM9W_00() Экспорт
+    ВыполнитьТест("SM9W/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("SM9W/01: Single character streams")
+&Тег("mapping")
+Процедура Test_SM9W_01() Экспорт
+    ВыполнитьТест("SM9W/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("TE2A: Spec Example 8.16. Block Mappings")
+&Тег("mapping")
+&Тег("spec")
+Процедура Test_TE2A() Экспорт
+    ВыполнитьТест("TE2A");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("ZH7C: Anchors in Mapping")
+&Тег("mapping")
+&Тег("anchor")
+Процедура Test_ZH7C() Экспорт
+    ВыполнитьТест("ZH7C");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("ZF4X: Spec Example 2.6. Mapping of Mappings")
+&Тег("mapping")
+&Тег("spec")
+&Тег("flow")
+Процедура Test_ZF4X() Экспорт
+    ВыполнитьТест("ZF4X");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Q8AD: Spec Example 7.5. Double Quoted Line Breaks [1.3]")
+&Тег("1_3_mod")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("double")
+&Тег("scalar")
+Процедура Test_Q8AD() Экспорт
+    ВыполнитьТест("Q8AD");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("M2N8/00: Question mark edge cases")
+&Тег("edge")
+&Тег("empty_key")
+Процедура Test_M2N8_00() Экспорт
+    ВыполнитьТест("M2N8/00");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("M2N8/01: Question mark edge cases")
+&Тег("edge")
+&Тег("empty_key")
+Процедура Test_M2N8_01() Экспорт
+    ВыполнитьТест("M2N8/01");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("T26H: Spec Example 8.8. Literal Content [1.3]")
+&Тег("literal")
+&Тег("1_3_mod")
+&Тег("comment")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("scalar")
+Процедура Test_T26H() Экспорт
+    ВыполнитьТест("T26H");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("AVM7: Empty Stream")
+&Тег("edge")
+Процедура Test_AVM7() Экспорт
+    ВыполнитьТест("AVM7");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DC7X: Various trailing tabs")
+&Тег("comment")
+&Тег("whitespace")
+Процедура Test_DC7X() Экспорт
+    ВыполнитьТест("DC7X");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4FJ6: Nested implicit complex keys")
+&Тег("mapping")
+&Тег("complex_key")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_4FJ6() Экспорт
+    ВыполнитьТест("4FJ6");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("3R3P: Single block sequence with anchor")
+&Тег("anchor")
+&Тег("sequence")
+Процедура Test_3R3P() Экспорт
+    ВыполнитьТест("3R3P");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("CXX2: Mapping with anchor on document start line")
+&Тег("mapping")
+&Тег("anchor")
+&Тег("error")
+&Тег("header")
+Процедура Test_CXX2() Экспорт
+    ВыполнитьТест("CXX2");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("2SXE: Anchors With Colon in Name")
+&Тег("mapping")
+&Тег("alias")
+&Тег("edge")
+&Тег("1_3_err")
+Процедура Test_2SXE() Экспорт
+    ВыполнитьТест("2SXE");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DK4H: Implicit key followed by newline")
+&Тег("mapping")
+&Тег("sequence")
+&Тег("error")
+&Тег("flow")
+Процедура Test_DK4H() Экспорт
+    ВыполнитьТест("DK4H");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("A2M4: Spec Example 6.2. Indentation Indicators")
+&Тег("indent")
+&Тег("libyaml_err")
+&Тег("upto_1_2")
+&Тег("explicit_key")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("sequence")
+Процедура Test_A2M4() Экспорт
+    ВыполнитьТест("A2M4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("F2C7: Anchors and Tags")
+&Тег("anchor")
+&Тег("tag")
+Процедура Test_F2C7() Экспорт
+    ВыполнитьТест("F2C7");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("7LBH: Multiline double quoted implicit keys")
+&Тег("double")
+&Тег("error")
+Процедура Test_7LBH() Экспорт
+    ВыполнитьТест("7LBH");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9HCY: Need document footer before directives")
+&Тег("footer")
+&Тег("unknown_tag")
+&Тег("directive")
+&Тег("error")
+&Тег("tag")
+Процедура Test_9HCY() Экспорт
+    ВыполнитьТест("9HCY");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("ZWK4: Key with anchor after missing explicit mapping value")
+&Тег("mapping")
+&Тег("explicit_key")
+&Тег("anchor")
+Процедура Test_ZWK4() Экспорт
+    ВыполнитьТест("ZWK4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("FBC9: Allowed characters in plain scalars")
+&Тег("scalar")
+Процедура Test_FBC9() Экспорт
+    ВыполнитьТест("FBC9");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("7W2P: Block Mapping with Missing Values")
+&Тег("mapping")
+&Тег("explicit_key")
+Процедура Test_7W2P() Экспорт
+    ВыполнитьТест("7W2P");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("8KB6: Multiline plain flow mapping key without value")
+&Тег("mapping")
+&Тег("flow")
+Процедура Test_8KB6() Экспорт
+    ВыполнитьТест("8KB6");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("UT92: Spec Example 9.4. Explicit Documents")
+&Тег("footer")
+&Тег("comment")
+&Тег("spec")
+&Тег("header")
+&Тег("flow")
+Процедура Test_UT92() Экспорт
+    ВыполнитьТест("UT92");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("8MK2: Explicit Non-Specific Tag")
+&Тег("tag")
+&Тег("1_3_err")
+Процедура Test_8MK2() Экспорт
+    ВыполнитьТест("8MK2");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("G5U8: Plain dashes in flow sequence")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_G5U8() Экспорт
+    ВыполнитьТест("G5U8");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4ABK: Flow Mapping Separate Values")
+&Тег("mapping")
+&Тег("flow")
+Процедура Test_4ABK() Экспорт
+    ВыполнитьТест("4ABK");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("P2AD: Spec Example 8.1. Block Scalar Header")
+&Тег("literal")
+&Тег("comment")
+&Тег("spec")
+&Тег("folded")
+&Тег("scalar")
+Процедура Test_P2AD() Экспорт
+    ВыполнитьТест("P2AD");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("JR7V: Question marks in scalars")
+&Тег("scalar")
+&Тег("flow")
+Процедура Test_JR7V() Экспорт
+    ВыполнитьТест("JR7V");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("U3C3: Spec Example 6.16. “TAG” directive")
+&Тег("spec")
+&Тег("tag")
+&Тег("header")
+Процедура Test_U3C3() Экспорт
+    ВыполнитьТест("U3C3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("S3PD: Spec Example 8.18. Implicit Block Mapping Entries")
+&Тег("mapping")
+&Тег("spec")
+&Тег("empty_key")
+Процедура Test_S3PD() Экспорт
+    ВыполнитьТест("S3PD");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4Q9F: Folded Block Scalar [1.3]")
+&Тег("1_3_mod")
+&Тег("whitespace")
+&Тег("folded")
+&Тег("scalar")
+Процедура Test_4Q9F() Экспорт
+    ВыполнитьТест("4Q9F");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("SY6V: Anchor before sequence entry on same line")
+&Тег("anchor")
+&Тег("sequence")
+&Тег("error")
+Процедура Test_SY6V() Экспорт
+    ВыполнитьТест("SY6V");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("X8DW: Explicit key and value seperated by comment")
+&Тег("mapping")
+&Тег("explicit_key")
+&Тег("comment")
+Процедура Test_X8DW() Экспорт
+    ВыполнитьТест("X8DW");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("UDM2: Plain URL in flow mapping")
+&Тег("scalar")
+&Тег("flow")
+Процедура Test_UDM2() Экспорт
+    ВыполнитьТест("UDM2");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("KMK3: Block Submapping")
+&Тег("mapping")
+Процедура Test_KMK3() Экспорт
+    ВыполнитьТест("KMK3");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("DHP8: Flow Sequence")
+&Тег("sequence")
+&Тег("flow")
+Процедура Test_DHP8() Экспорт
+    ВыполнитьТест("DHP8");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6SLA: Allowed characters in quoted mapping key")
+&Тег("mapping")
+&Тег("single")
+&Тег("double")
+Процедура Test_6SLA() Экспорт
+    ВыполнитьТест("6SLA");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("54T7: Flow Mapping")
+&Тег("mapping")
+&Тег("flow")
+Процедура Test_54T7() Экспорт
+    ВыполнитьТест("54T7");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Z67P: Spec Example 8.21. Block Scalar Nodes [1.3]")
+&Тег("indent")
+&Тег("literal")
+&Тег("1_3_mod")
+&Тег("spec")
+&Тег("local_tag")
+&Тег("folded")
+&Тег("tag")
+Процедура Test_Z67P() Экспорт
+    ВыполнитьТест("Z67P");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("5MUD: Colon and adjacent value on next line")
+&Тег("mapping")
+&Тег("double")
+&Тег("flow")
+Процедура Test_5MUD() Экспорт
+    ВыполнитьТест("5MUD");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4UYU: Colon in Double Quoted String")
+&Тег("mapping")
+&Тег("scalar")
+&Тег("1_3_err")
+Процедура Test_4UYU() Экспорт
+    ВыполнитьТест("4UYU");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("ZCZ6: Invalid mapping in plain single line value")
+&Тег("mapping")
+&Тег("scalar")
+&Тег("error")
+Процедура Test_ZCZ6() Экспорт
+    ВыполнитьТест("ZCZ6");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("AZ63: Sequence With Same Indentation as Parent Mapping")
+&Тег("indent")
+&Тег("mapping")
+&Тег("sequence")
+Процедура Test_AZ63() Экспорт
+    ВыполнитьТест("AZ63");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("FP8R: Zero indented block scalar")
+&Тег("indent")
+&Тег("folded")
+&Тег("scalar")
+Процедура Test_FP8R() Экспорт
+    ВыполнитьТест("FP8R");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("5C5M: Spec Example 7.15. Flow Mappings")
+&Тег("mapping")
+&Тег("spec")
+&Тег("flow")
+Процедура Test_5C5M() Экспорт
+    ВыполнитьТест("5C5M");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("L383: Two scalar docs with trailing comments")
+&Тег("comment")
+Процедура Test_L383() Экспорт
+    ВыполнитьТест("L383");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("EX5H: Multiline Scalar at Top Level [1.3]")
+&Тег("1_3_mod")
+&Тег("whitespace")
+&Тег("scalar")
+Процедура Test_EX5H() Экспорт
+    ВыполнитьТест("EX5H");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("Z9M4: Spec Example 6.22. Global Tag Prefix")
+&Тег("unknown_tag")
+&Тег("spec")
+&Тег("tag")
+&Тег("header")
+Процедура Test_Z9M4() Экспорт
+    ВыполнитьТест("Z9M4");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("PUW8: Document start on last line")
+&Тег("header")
+Процедура Test_PUW8() Экспорт
+    ВыполнитьТест("PUW8");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("SU5Z: Comment without whitespace after doublequoted scalar")
+&Тег("comment")
+&Тег("whitespace")
+&Тег("double")
+&Тег("error")
+Процедура Test_SU5Z() Экспорт
+    ВыполнитьТест("SU5Z");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("4H7K: Flow sequence with invalid extra closing bracket")
+&Тег("sequence")
+&Тег("error")
+&Тег("flow")
+Процедура Test_4H7K() Экспорт
+    ВыполнитьТест("4H7K");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6M2F: Aliases in Explicit Block Mapping")
+&Тег("alias")
+&Тег("explicit_key")
+&Тег("empty_key")
+Процедура Test_6M2F() Экспорт
+    ВыполнитьТест("6M2F");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("7BUB: Spec Example 2.10. Node for “Sammy Sosa” appears twice in this document")
+&Тег("mapping")
+&Тег("alias")
+&Тег("spec")
+&Тег("sequence")
+Процедура Test_7BUB() Экспорт
+    ВыполнитьТест("7BUB");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("M29M: Literal Block Scalar")
+&Тег("literal")
+&Тег("whitespace")
+&Тег("scalar")
+Процедура Test_M29M() Экспорт
+    ВыполнитьТест("M29M");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("5T43: Colon at the beginning of adjacent flow scalar")
+&Тег("mapping")
+&Тег("scalar")
+&Тег("flow")
+Процедура Test_5T43() Экспорт
+    ВыполнитьТест("5T43");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6HB6: Spec Example 6.1. Indentation Spaces")
+&Тег("indent")
+&Тег("upto_1_2")
+&Тег("comment")
+&Тег("spec")
+&Тег("whitespace")
+&Тег("flow")
+Процедура Test_6HB6() Экспорт
+    ВыполнитьТест("6HB6");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("6WLZ: Spec Example 6.18. Primary Tag Handle [1.3]")
+&Тег("1_3_mod")
+&Тег("spec")
+&Тег("directive")
+&Тег("local_tag")
+&Тег("tag")
+Процедура Test_6WLZ() Экспорт
+    ВыполнитьТест("6WLZ");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("RZT7: Spec Example 2.28. Log File")
+&Тег("mapping")
+&Тег("literal")
+&Тег("spec")
+&Тег("sequence")
+&Тег("header")
+Процедура Test_RZT7() Экспорт
+    ВыполнитьТест("RZT7");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("B3HG: Spec Example 8.9. Folded Scalar [1.3]")
+&Тег("1_3_mod")
+&Тег("spec")
+&Тег("folded")
+&Тег("scalar")
+Процедура Test_B3HG() Экспорт
+    ВыполнитьТест("B3HG");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("CUP7: Spec Example 5.6. Node Property Indicators")
+&Тег("alias")
+&Тег("spec")
+&Тег("local_tag")
+&Тег("tag")
+Процедура Test_CUP7() Экспорт
+    ВыполнитьТест("CUP7");
+КонецПроцедуры
+
+&Тест
+&ОтображаемоеИмя("9SHH: Spec Example 5.8. Quoted Scalar Indicators")
+&Тег("spec")
+&Тег("scalar")
+Процедура Test_9SHH() Экспорт
+    ВыполнитьТест("9SHH");
+КонецПроцедуры
