@@ -337,7 +337,6 @@
 &Тег("double")
 &Тег("folded")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_735Y() Экспорт
     ВыполнитьТест("735Y");
 КонецПроцедуры
@@ -457,7 +456,6 @@
 &Тег("unknown_tag")
 &Тег("spec")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_7FWL() Экспорт
     ВыполнитьТест("7FWL");
 КонецПроцедуры
@@ -516,7 +514,6 @@
 &Тег("unknown_tag")
 &Тег("explicit_key")
 &Тег("spec")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_2XXW() Экспорт
     ВыполнитьТест("2XXW");
 КонецПроцедуры
@@ -797,7 +794,6 @@
 &Тег("explicit_key")
 &Тег("tag")
 &Тег("header")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_35KP() Экспорт
     ВыполнитьТест("35KP");
 КонецПроцедуры
@@ -836,7 +832,6 @@
 &Тег("spec")
 &Тег("directive")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_CC74() Экспорт
     ВыполнитьТест("CC74");
 КонецПроцедуры
@@ -1007,7 +1002,6 @@
 &ОтображаемоеИмя("52DL: Explicit Non-Specific Tag [1.3]")
 &Тег("1_3_mod")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_52DL() Экспорт
     ВыполнитьТест("52DL");
 КонецПроцедуры
@@ -1586,7 +1580,6 @@
 &Тег("anchor")
 &Тег("error")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_H7J7() Экспорт
     ВыполнитьТест("H7J7");
 КонецПроцедуры
@@ -1759,7 +1752,6 @@
 &Тег("anchor")
 &Тег("tag")
 &Тег("1_3_err")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_9KAX() Экспорт
     ВыполнитьТест("9KAX");
 КонецПроцедуры
@@ -1770,7 +1762,6 @@
 &Тег("unknown_tag")
 &Тег("spec")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_J7PZ() Экспорт
     ВыполнитьТест("J7PZ");
 КонецПроцедуры
@@ -1808,7 +1799,6 @@
 &Тег("mapping")
 &Тег("explicit_key")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_L94M() Экспорт
     ВыполнитьТест("L94M");
 КонецПроцедуры
@@ -1872,7 +1862,6 @@
 &ОтображаемоеИмя("S4JQ: Spec Example 6.28. Non-Specific Tags")
 &Тег("spec")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_S4JQ() Экспорт
     ВыполнитьТест("S4JQ");
 КонецПроцедуры
@@ -1937,7 +1926,6 @@
 &Тег("mapping")
 &Тег("sequence")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_57H4() Экспорт
     ВыполнитьТест("57H4");
 КонецПроцедуры
@@ -2030,7 +2018,6 @@
 &Тег("folded")
 &Тег("tag")
 &Тег("1_3_err")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_M5C3() Экспорт
     ВыполнитьТест("M5C3");
 КонецПроцедуры
@@ -2065,7 +2052,6 @@
 &ОтображаемоеИмя("74H7: Tags in Implicit Mapping")
 &Тег("mapping")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_74H7() Экспорт
     ВыполнитьТест("74H7");
 КонецПроцедуры
@@ -2220,7 +2206,6 @@
 &Тег("directive")
 &Тег("local_tag")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_C4HZ() Экспорт
     ВыполнитьТест("C4HZ");
 КонецПроцедуры
@@ -2284,7 +2269,6 @@
 &Тег("directive")
 &Тег("error")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_QLJ7() Экспорт
     ВыполнитьТест("QLJ7");
 КонецПроцедуры
@@ -2410,7 +2394,6 @@
 &Тег("sequence")
 &Тег("tag")
 &Тег("flow")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_EHF6() Экспорт
     ВыполнитьТест("EHF6");
 КонецПроцедуры
@@ -2440,7 +2423,6 @@
 &Тег("spec")
 &Тег("tag")
 &Тег("header")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_P76L() Экспорт
     ВыполнитьТест("P76L");
 КонецПроцедуры
@@ -2466,7 +2448,6 @@
 &ОтображаемоеИмя("2AUY: Tags in Block Sequence")
 &Тег("sequence")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_2AUY() Экспорт
     ВыполнитьТест("2AUY");
 КонецПроцедуры
@@ -2577,7 +2558,6 @@
 &ОтображаемоеИмя("565N: Construct Binary")
 &Тег("unknown_tag")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_565N() Экспорт
     ВыполнитьТест("565N");
 КонецПроцедуры
@@ -2588,7 +2568,6 @@
 &Тег("directive")
 &Тег("local_tag")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_5TYM() Экспорт
     ВыполнитьТест("5TYM");
 КонецПроцедуры
@@ -2646,7 +2625,6 @@
 &Тег("scalar")
 &Тег("tag")
 &Тег("flow")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_WZ62() Экспорт
     ВыполнитьТест("WZ62");
 КонецПроцедуры
@@ -2682,7 +2660,6 @@
 &Тег("alias")
 &Тег("spec")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_LE5A() Экспорт
     ВыполнитьТест("LE5A");
 КонецПроцедуры
@@ -2691,7 +2668,6 @@
 &ОтображаемоеИмя("LHL4: Invalid tag")
 &Тег("error")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_LHL4() Экспорт
     ВыполнитьТест("LHL4");
 КонецПроцедуры
@@ -2846,7 +2822,6 @@
 &Тег("mapping")
 &Тег("sequence")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_6JWB() Экспорт
     ВыполнитьТест("6JWB");
 КонецПроцедуры
@@ -2876,7 +2851,6 @@
 &Тег("anchor")
 &Тег("tag")
 &Тег("1_3_err")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_BU8L() Экспорт
     ВыполнитьТест("BU8L");
 КонецПроцедуры
@@ -3105,7 +3079,6 @@
 &Тег("spec")
 &Тег("sequence")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_UGM3() Экспорт
     ВыполнитьТест("UGM3");
 КонецПроцедуры
@@ -3133,7 +3106,6 @@
 &ОтображаемоеИмя("U99R: Invalid comma in tag")
 &Тег("error")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_U99R() Экспорт
     ВыполнитьТест("U99R");
 КонецПроцедуры
@@ -3176,7 +3148,6 @@
 
 &Тест
 &ОтображаемоеИмя("9WXW: Spec Example 6.18. Primary Tag Handle")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 &Тег("unknown_tag")
 &Тег("spec")
 &Тег("directive")
@@ -3198,7 +3169,6 @@
 
 &Тест
 &ОтображаемоеИмя("6CK3: Spec Example 6.26. Tag Shorthands")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 &Тег("spec")
 &Тег("local_tag")
 &Тег("tag")
@@ -3344,7 +3314,6 @@
 
 &Тест
 &ОтображаемоеИмя("FH7J: Tags on Empty Scalars")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 &Тег("scalar")
 &Тег("tag")
 Процедура Test_FH7J() Экспорт
@@ -3434,7 +3403,6 @@
 &Тег("alias")
 &Тег("spec")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_HMQ5() Экспорт
     ВыполнитьТест("HMQ5");
 КонецПроцедуры
@@ -3601,7 +3569,6 @@
 
 &Тест
 &ОтображаемоеИмя("F2C7: Anchors and Tags")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 &Тег("anchor")
 &Тег("tag")
 Процедура Test_F2C7() Экспорт
@@ -3623,7 +3590,6 @@
 &Тег("directive")
 &Тег("error")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_9HCY() Экспорт
     ВыполнитьТест("9HCY");
 КонецПроцедуры
@@ -3675,7 +3641,6 @@
 &ОтображаемоеИмя("8MK2: Explicit Non-Specific Tag")
 &Тег("tag")
 &Тег("1_3_err")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_8MK2() Экспорт
     ВыполнитьТест("8MK2");
 КонецПроцедуры
@@ -3721,7 +3686,6 @@
 &Тег("spec")
 &Тег("tag")
 &Тег("header")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_U3C3() Экспорт
     ВыполнитьТест("U3C3");
 КонецПроцедуры
@@ -3815,7 +3779,6 @@
 &Тег("local_tag")
 &Тег("folded")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_Z67P() Экспорт
     ВыполнитьТест("Z67P");
 КонецПроцедуры
@@ -3897,7 +3860,6 @@
 &Тег("spec")
 &Тег("tag")
 &Тег("header")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_Z9M4() Экспорт
     ВыполнитьТест("Z9M4");
 КонецПроцедуры
@@ -3980,13 +3942,11 @@
 
 &Тест
 &ОтображаемоеИмя("6WLZ: Spec Example 6.18. Primary Tag Handle [1.3]")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 &Тег("1_3_mod")
 &Тег("spec")
 &Тег("directive")
 &Тег("local_tag")
 &Тег("tag")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 Процедура Test_6WLZ() Экспорт
     ВыполнитьТест("6WLZ");
 КонецПроцедуры
@@ -4014,7 +3974,6 @@
 
 &Тест
 &ОтображаемоеИмя("CUP7: Spec Example 5.6. Node Property Indicators")
-&Выключен("Explicit typing is denoted with a tag using the exclamation point (!) symbol")
 &Тег("alias")
 &Тег("spec")
 &Тег("local_tag")
