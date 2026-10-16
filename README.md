@@ -3,7 +3,7 @@
 Полнофункциональная библиотека для работы с YAML в экосистеме OneScript/1C. Реализует парсинг и сериализацию YAML с поддержкой основных возможностей стандарта YAML 1.2 включая вложенные структуры, якоря, многострочные литералы и Flow Style синтаксис.
 
 [![GitHub release](https://img.shields.io/github/v/release/Segate-ekb/oscript-yaml)](https://github.com/Segate-ekb/oscript-yaml/releases)
-[![Tests](https://img.shields.io/badge/tests-418%20passed-green)](https://github.com/Segate-ekb/oscript-yaml)
+[![Tests](https://img.shields.io/badge/tests-424%20passed-green)](https://github.com/Segate-ekb/oscript-yaml)
 [![OneScript](https://img.shields.io/badge/OneScript-2.0.0--rc.7+-blue)](https://oscript.io/)
 
 ## 📋 Оглавление
@@ -219,8 +219,8 @@ git clone https://github.com/Segate-ekb/oscript-yaml.git
 
 Проект включает обширный набор тестов на основе официального YAML Test Suite:
 
-- **Всего тестов:** 418 обнаружено
-- **Пройдено:** 418 тестов (100%)
+- **Всего тестов:** 424 обнаружено
+- **Пройдено:** 424 тестов (100%)
 - **Пропущено:** 0 тестов
 - **Покрытие:** основные возможности YAML 1.2
 
