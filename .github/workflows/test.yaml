@@ -11,7 +11,14 @@ jobs:
       fail-fast: false
       matrix:
         oscript_version: ['default', 'stable', 'dev']
+        include:
+          # default — это ВерсияСреды из packagedef (2.0.0).
+          # OneUnit начиная с 0.5.2 требует OneScript 2.2.0, поэтому для него
+          # закрепляем последнюю версию OneUnit, работающую на 2.0.0.
+          - oscript_version: default
+            oneunit_version: '0.5.1'
     uses: autumn-library/workflows/.github/workflows/test.yml@main
     with:
       test_engine: oneunit
       oscript_version: ${{ matrix.oscript_version }}
+      oneunit_version: ${{ matrix.oneunit_version }}
